@@ -1,18 +1,20 @@
 # 一文读懂 LangChain 中间件之顺序篇
 
+![image\.png](图片和附件/image.png)
+
 # 总览
 
 先看总结图：它展示了 6 个同步方法的调用时机，以及多个 Middleware 的执行顺序。本文重点解释这些顺序是如何形成的。
 
 前置顺序进，包裹层层套，后置逆序出
 
-![image\.png](图片和附件/image.png)
+![image\.png](图片和附件/image%202.png)
 
 注：另外还有 6 个对应的异步方法。除执行方式为异步外，其逻辑与同步方法相同，本文不再展开。
 
 **建议保存此图，方便以后查阅**。如果觉得内容有帮助，欢迎关注小编。
 
-![image\.png](图片和附件/image%202.png)
+![image\.png](图片和附件/image%203.png)
 
 友情提示：电脑查看体验更佳
 
@@ -312,24 +314,6 @@ wrap\_model\_call顺序相关的逻辑和wrap\_tool\_call差不多，最终会�
 2. 任意 Middleware 实现了 wrap\_tool\_call。
 
 3. 任意 Middleware 实现了 awrap\_tool\_call（wrap\_tool\_call 的异步形式）。
-
-```Python
-
-
-# Create ToolNode if we have client-side tools OR if middleware defines wrap_tool_call
-# (which may handle dynamically registered tools)
-tool_node = (
-    ToolNode(
-        tools=available_tools,
-        wrap_tool_call=wrap_tool_call_wrapper,
-        awrap_tool_call=awrap_tool_call_wrapper,
-    )
-    if available_tools or wrap_tool_call_wrapper or awrap_tool_call_wrapper
-    else None
-)
-```
-
-
 
 ## 图中的其他节点
 
