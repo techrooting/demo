@@ -1,4 +1,4 @@
-# 一文读懂 LangChain 中间件之字段详解
+# LangChain 中间件之字段详解
 
 前文讲述了LangChain中间件方法的执行顺序
 
@@ -6,9 +6,7 @@
 
 ![中间件详解篇总结\.png](图片和附件/中间件详解篇总结.png)
 
-**建议保存此图，方便以后查阅**。如果觉得内容有帮助，欢迎关注小编。
-
-![image\.png](图片和附件/image.png)
+**建议保存此图，方便以后查阅**。
 
 友情提示：电脑查看体验更佳
 
@@ -471,6 +469,17 @@ result = agent.invoke(
 2. 未达到上限时返回计数更新；
 
 3. 达到 3 次后，返回的 `jump_to="end"` 会让 agent 提前结束。`can_jump_to=["end"]` 用于声明这个 hook 允许跳到 `end`。
+
+如果是类继承的方式，可以用下面的方式标注can\_jump\_to
+
+```Python
+from langchain.agents.middleware import hook_config
+
+@hook_config(can_jump_to=["end"])    
+def before_model(self, state, runtime):        
+    print("before_agent")        
+    return None
+```
 
 ## wrap\_model\_call：拦截模型调用
 
@@ -1051,6 +1060,8 @@ hook 返回的 partial state 不会在 middleware 内部合并，而是交给 La
 |`LLMToolEmulator`|`wrap_tool_call`|用 LLM 模拟工具返回，支持测试与探索验证|
 
 `TodoListMiddleware`讲解可以查看xxx，期待后续其他middleware讲解请关注我
+
+![langchain 中间件字段详解封面\.png](图片和附件/langchain%20中间件字段详解封面.png)
 
 
 

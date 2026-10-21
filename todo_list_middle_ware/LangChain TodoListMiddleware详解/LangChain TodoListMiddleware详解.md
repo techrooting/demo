@@ -1,4 +1,8 @@
-# 一文读懂 LangChain TodoListMiddleware
+# LangChain TodoListMiddleware详解
+
+# 一图总结
+
+![TodoListMiddleware一图总结\.png](图片和附件/TodoListMiddleware一图总结.png)
 
 # TodoListMiddleware是什么
 
@@ -233,7 +237,7 @@ tests ran in
 
 1. messages是运行过程和过程结果，总结如下：
 
-![执行流程\.png](图片和附件/执行流程.png)
+![TodoListMiddleware messages解析\.png](图片和附件/TodoListMiddleware%20messages解析.png)
 
 2. todos是中间件产生的规划，可以直接返回给前端，到这里你应该有些疑惑：todos是怎么产生的？为什么名字是todos，不是别的？里面的content和status是什么怎么定义的？怎么写到返回结果的？write\_todos工具又是什么？别急，下面就一一讲解！
 
@@ -493,7 +497,7 @@ middleware_w_after_model = [
 
 ## 一次调用流程总结如下
 
-![generated\_image\_211416\.png](图片和附件/generated_image_211416.png)
+![TodoListMiddleware一次调用流程\.png](图片和附件/TodoListMiddleware一次调用流程.png)
 
 1. `agent.invoke` 把用户消息写入初始 state。
 
@@ -597,12 +601,6 @@ middleware_w_after_model = [
 6. **是否需要跨会话持久化？** 需要时同步配置 checkpointer 或外部状态存储。
 
 **最终建议**：面向用户的编码、研究、运维等长链路 Agent，可以默认启用；短任务、高频低延迟调用、无需展示过程的内部链路，按复杂度动态关闭。它提升的是规划过程的可见性和可控性，不是模型的规划上限。
-
----
-
-![image\.png](图片和附件/image%201.png)
-
-
 
 # 附录
 
@@ -766,10 +764,6 @@ Remember: If you only need to make a few tool calls to complete a task, and it i
 write_todos 用于跟踪工作，而不是交付答案。无论用户要求的是计算结果、摘要、对比还是数据，都必须在最后一次调用 write_todos 之后的消息中以文本形式给出。
 将最后一项待办事项标记为已完成，本身并不等同于向用户作出答复。
 ```
-
-![首行关注\.png](图片和附件/首行关注.png)
-
-![image\.png](图片和附件/image.png)
 
 
 

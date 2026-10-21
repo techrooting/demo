@@ -1,0 +1,1 @@
+{"source":"/skills","files":["/skills/load-trace-demo/SKILL.md","/skills/load-trace-demo/references/loading-contract.md","/skills/load-trace-demo/scripts/summarize_skill_payload.py","/skills/load-trace-demo/assets/load-map.json"],"phases":["metadata: ls source + parse frontmatter","instruction: read SKILL.md","support: read reference/script/asset"]}

@@ -1,10 +1,10 @@
 # 一文读懂MCP：从原理到落地
 
+本文围绕 MCP 解决的工程集成问题展开，结合 FastMCP 示例串起服务端注册、客户端发现与调用、Tool / Resource / Prompt 三类能力、stdio 与 Streamable HTTP 传输选择，以及接入高德地图等实践案例，帮助你从原理到落地理解 MCP 的价值与边界。
+
 # 什么是MCP
 
 MCP（Model Context Protocol，模型上下文协议）是连接 AI 应用与外部系统的开放标准，由 Anthropic 于 2024 年 11 月 25 日发布并开源。
-
-本文围绕 MCP 解决的工程集成问题展开，结合 FastMCP 示例串起服务端注册、客户端发现与调用、Tool / Resource / Prompt 三类能力、stdio 与 Streamable HTTP 传输选择，以及接入高德地图等实践案例，帮助你从原理到落地理解 MCP 的价值与边界。
 
 # MCP解决什么问题
 
@@ -20,7 +20,7 @@ MCP（Model Context Protocol，模型上下文协议）是连接 AI 应用与外
 
 工具侧开发者只需要为每个外部系统开发 1 个 MCP 服务端，总共 N 个；AI 应用侧开发者只需要为自己的应用实现 1 个 MCP 客户端，总共 M 个。
 
-![image\.png](图片和附件/image%202.png)
+![MCP NXM\-N\+M\.png](图片和附件/MCP%20NXM-N+M.png)
 
 # 从一个例子讲起
 
@@ -153,7 +153,7 @@ mcp.run("streamable-http", host="127.0.0.1", port=8001)
 
 流程图如下：
 
-![artifacts\_generated\_image\_162905\.png](图片和附件/artifacts_generated_image_162905.png)
+![MCP异步调用全流程\.png](图片和附件/MCP异步调用全流程.png)
 
 ### 创建传输通道
 
@@ -173,7 +173,9 @@ SDK 将 HTTP 通信封装成消息流，供 ClientSession 使用：
 
 ### ClientSession 按 MCP 协议发现、调用工具
 
-![image\.png](图片和附件/image%201.png)
+![MCP协议发现 调用工具\.png](图片和附件/MCP协议发现%20调用工具.png)
+
+
 
 ```python
 async with ClientSession(read, write) as session:
@@ -336,7 +338,7 @@ if __name__ == "__main__":
 |客户端（Client）|运行在宿主应用内部，负责和单个 MCP 服务端建立连接，每个客户端与对应服务端保持 1:1 的连接关系。|
 |服务端（Server）|独立运行的外部程序，通过标准 API 经客户端向 AI 模型暴露 tools、resources、prompts 等能力，比如：文件系统、数据库、代码仓库、业务 API 包装层。|
 
-![artifacts\_edited\_image\_202836\.png](图片和附件/artifacts_edited_image_202836.png)
+![MCP 标准客户端\-服务端架构\.png](图片和附件/MCP%20标准客户端-服务端架构.png)
 
 # 两种传输方式：stdio 与 Streamable HTTP
 
@@ -363,9 +365,7 @@ if __name__ == "__main__":
 |基础设施与恢复|代理兼容性不稳定，断线重连与消息重放需额外处理。|更适配鉴权、网关和负载均衡，并支持断线恢复与消息重放。|
 |SSE 的角色|必须长期存在的独立传输通道。|按需使用的流式响应格式，不再是独立必选通道。|
 
-
-
-![image\.png](图片和附件/image.png)
+![MCP stdio通信流程\.png](图片和附件/MCP%20stdio通信流程.png)
 
 下面是以stdio传输方式启动的例子
 
@@ -674,17 +674,9 @@ tation":"西","duration":"63"},{"instruction":"沿南长街向北行驶806米右
 
 - 生产落地仍依赖审计和监控。
 
-![公众号文章结束图设计\.jpeg](图片和附件/公众号文章结束图设计.jpeg)
+# 封面
 
-# 参考链接
-
-官网地址：[https://modelcontextprotocol\.io/introduction](https://modelcontextprotocol.io/introduction)
-
-官方发布公告：[https://www\.anthropic\.com/news/model\-context\-protocol](https://www.anthropic.com/news/model-context-protocol)
-
-查看有哪些 MCP：[https://mcp\.so/zh/servers](https://mcp.so/zh/servers)
-
-github地址：https://github\.com/techrooting/demo/tree/main/mcp
+![MCP封面\.png](图片和附件/MCP封面.png)
 
 
 

@@ -1,6 +1,7 @@
 from time import perf_counter
 import os
 from dotenv import load_dotenv, find_dotenv
+from langchain.agents.middleware import hook_config
 
 load_dotenv(find_dotenv(), override=True)
 
@@ -27,6 +28,7 @@ def add(a: int, b: int) -> int:
 
 
 class TraceMiddleware(AgentMiddleware):
+    @hook_config(can_jump_to=["end"])
     def before_agent(self, state, runtime):
         print("before_agent")
         return None
