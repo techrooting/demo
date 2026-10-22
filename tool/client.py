@@ -1,11 +1,16 @@
-import os
+import sys
+from pathlib import Path
 
 from dotenv import load_dotenv, find_dotenv
+
+project_root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(project_root))
+
 load_dotenv(find_dotenv(), override=True)
 
 from langchain.agents import create_agent
-from langchain.chat_models import init_chat_model
 from langchain_core.tools import tool
+from model_factory import create_azure_openai_model
 from rich import print as rich_print
 
 
@@ -15,16 +20,7 @@ def add(a: int, b: int) -> int:
     return a + b
 
 
-
-model = init_chat_model(
-    model="gpt-5.5-2026-04-24",                 # model 参数会作为 azure_deployment 使用
-    model_provider="azure_openai",
-    api_version="2024-03-01-preview",
-    azure_endpoint=os.getenv("AZURE_ENDPOINT"),
-    api_key=os.getenv("API_KEY"),
-    max_tokens=4096,
-    max_retries=3,
-)
+model = create_azure_openai_model()
 
 agent = create_agent(
     model=model,
@@ -33,7 +29,7 @@ agent = create_agent(
 result = agent.invoke({
     "messages": [{
         "role": "user",
-        "content": "1+2=?",
+        "content": "请使用 add 工具计算 1+2=?",
     }]
 })
 

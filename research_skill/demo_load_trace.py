@@ -1,13 +1,16 @@
 import json
-import os
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+project_root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(project_root))
+
 from deepagents import create_deep_agent
 from deepagents.backends import FilesystemBackend
 from dotenv import find_dotenv, load_dotenv
-from langchain.chat_models import init_chat_model
+from model_factory import create_azure_openai_model
 from rich import print as rich_print
 
 load_dotenv(find_dotenv(), override=True)
@@ -84,15 +87,7 @@ class TracingFilesystemBackend(FilesystemBackend):
 
 
 def build_model() -> Any:
-    return init_chat_model(
-        model="gpt-5.5-2026-04-24",
-        model_provider="azure_openai",
-        api_version="2024-03-01-preview",
-        azure_endpoint=os.getenv("AZURE_ENDPOINT"),
-        api_key=os.getenv("API_KEY"),
-        max_tokens=4096,
-        max_retries=3,
-    )
+    return create_azure_openai_model()
 
 
 def build_loading_report(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
